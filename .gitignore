@@ -1,0 +1,25 @@
+# Dataset
+dataset/
+act_dataset/
+
+# Model files
+model.pkl
+scaler.pkl
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Audio files
+*.wav
+*.mp3
+
+# Images
+confusion_matrix.png
+
+# Keys
+key.txt
+
+# VS Code
+.vscode/

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acoustic Vehicle Classifier</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">[ VEHISOUND_ANALYZER ]</div>
+    <a href="#classifier" class="nav-btn">INITIATE_UPLOAD →</a>
+  </nav>
+
+  <!-- PAGE 1: HERO -->
+  <section class="hero" id="home">
+    <p class="sys-msg">// SYSTEM_MESSAGE_001: Trained SVM model achieving ~81% accuracy.</p>
+    <h1 class="hero-title">
+      ENGINE IDENTIFICATION<br />
+      USING ACOUSTIC<br />
+      SIGNAL ANALYSIS (ML)
+    </h1>
+    <a href="#classifier" class="cta-btn">TRY IT NOW</a>
+  </section>
+
+  <!-- PAGE 2: CLASSIFIER -->
+  <section class="classifier" id="classifier">
+
+    <!-- Upload Box -->
+    <div class="upload-zone" id="uploadZone">
+      <input type="file" id="fileInput" accept=".wav" hidden />
+      <p class="upload-title">DRAG_AND_DROP_WAV_FILE</p>
+      <p class="upload-or">OR</p>
+      <button class="browse-btn" onclick="document.getElementById('fileInput').click()">[ BROWSE_FILES ]</button>
+      <p class="upload-hint">// FILE_SUPPORT: .WAV_ONLY.</p>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading" id="loading" style="display:none;">
+      <div class="loading-bar"></div>
+      <p class="loading-text">// PROCESSING_AUDIO_SIGNAL...</p>
+    </div>
+
+    <!-- Results -->
+    <div class="results" id="results" style="display:none;">
+
+      <!-- Result Card -->
+      <div class="result-card" id="resultCard">
+        <div class="result-icons" id="resultIcons"></div>
+        <div class="result-label" id="resultLabel">—</div>
+        <div class="result-certainty" id="resultCertainty">—</div>
+      </div>
+
+      <!-- Feature Cards -->
+      <div class="features-grid">
+        <div class="feat-card">
+          <div class="feat-num">01</div>
+          <div class="feat-icon"><i class="fas fa-chart-bar"></i></div>
+          <div class="feat-name">SPECTRAL_CENTROID</div>
+          <div class="feat-val" id="f1">—</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-num">02</div>
+          <div class="feat-icon"><i class="fas fa-bolt"></i></div>
+          <div class="feat-name">TOTAL_ENERGY</div>
+          <div class="feat-val" id="f2">—</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-num">03</div>
+          <div class="feat-icon"><i class="fas fa-wave-square"></i></div>
+          <div class="feat-name">DOMINANT_FREQ</div>
+          <div class="feat-val" id="f3">—</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-num">04</div>
+          <div class="feat-icon"><i class="fas fa-sliders-h"></i></div>
+          <div class="feat-name">BAND_ENERGY_RATIO</div>
+          <div class="feat-val" id="f4">—</div>
+        </div>
+      </div>
+
+      <!-- Graphs -->
+      <div class="graphs-grid">
+        <div class="graph-box">
+          <p class="graph-label">TIME_DOMAIN (Waveform)</p>
+          <img id="waveformImg" src="" alt="waveform" class="graph-img" />
+        </div>
+        <div class="graph-box">
+          <p class="graph-label">FREQUENCY_DOMAIN (FFT)</p>
+          <img id="fftImg" src="" alt="fft" class="graph-img" />
+        </div>
+      </div>
+
+      <!-- Reset -->
+      <button class="reset-btn" onclick="resetUI()">[ ANALYZE_NEW_FILE ]</button>
+
+    </div>
+  </section>
+
+  <!-- PAGE 3: ABOUT -->
+  <section class="about" id="about">
+    <p class="sys-msg">// MODULE_INFO: System architecture overview.</p>
+    <h2 class="section-title">Tech Stack</h2>
+
+    <div class="stack-cards">
+      <div class="stack-card">
+        <div class="stack-num">01</div>
+        <div class="stack-sub">CORE</div>
+        <div class="stack-name">PYTHON / FLASK / LIBROSA / SCIKIT-LEARN</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-num">02</div>
+        <div class="stack-sub">PROCESSING</div>
+        <div class="stack-name">FFT / FEATURE EXTRACTION</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-num">03</div>
+        <div class="stack-sub">MODEL</div>
+        <div class="stack-name">SVM (RBF) / CLASSIFIER</div>
+      </div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:60px;">Workflow</h2>
+    <div class="workflow">
+      <div class="wf-step">[AUDIO_INPUT]</div>
+      <div class="wf-arrow">→</div>
+      <div class="wf-step">[FFT_TRANSFORM]</div>
+      <div class="wf-arrow">→</div>
+      <div class="wf-step">[FEATURE_EXTRACTION]</div>
+      <div class="wf-arrow">→</div>
+      <div class="wf-step">[NORMALIZATION]</div>
+      <div class="wf-arrow">→</div>
+      <div class="wf-step">[SVM_ANALYSIS]</div>
+      <div class="wf-arrow">→</div>
+      <div class="wf-step">[VEHICLE_CLASS_PREDICTION]</div>
+    </div>
+  </section>
+
+  <script src="/static/main.js"></script>
+</body>
+
+</html>
