@@ -306,7 +306,15 @@ body {
   to   { opacity: 1; filter: brightness(1); }
 }
 
-/* RESET BTN */
+/* ACTION BUTTONS */
+.action-btns {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 8px;
+}
+
 .reset-btn {
   font-family: var(--mono);
   font-size: 14px;
@@ -317,11 +325,26 @@ body {
   cursor: pointer;
   letter-spacing: 2px;
   transition: all 0.3s;
-  margin-top: 8px;
 }
 .reset-btn:hover {
   border-color: var(--cyan);
   color: var(--cyan);
+}
+
+.download-btn {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: #fff;
+  background: transparent;
+  border: 1px solid #333;
+  padding: 14px 32px;
+  cursor: pointer;
+  letter-spacing: 2px;
+  transition: all 0.3s;
+}
+.download-btn:hover {
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 /* ABOUT */
@@ -414,4 +437,5 @@ body {
   .hero-title    { font-size: 52px; }
   .navbar        { padding: 0 20px; }
   .classifier, .about { padding: 100px 20px 60px; }
+  .action-btns   { flex-direction: column; align-items: center; }
 }
