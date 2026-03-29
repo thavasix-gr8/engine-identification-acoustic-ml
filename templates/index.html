@@ -20,7 +20,7 @@
 
   <!-- PAGE 1: HERO -->
   <section class="hero" id="home">
-    <p class="sys-msg">// SYSTEM_MESSAGE_001: Trained SVM model achieving ~81% accuracy.</p>
+    <p class="sys-msg">// SYSTEM_MESSAGE_001: Trained SVM model achieving ~98.4% accuracy.</p>
     <h1 class="hero-title">
       ENGINE IDENTIFICATION<br />
       USING ACOUSTIC<br />
@@ -32,7 +32,6 @@
   <!-- PAGE 2: CLASSIFIER -->
   <section class="classifier" id="classifier">
 
-    <!-- Upload Box -->
     <div class="upload-zone" id="uploadZone">
       <input type="file" id="fileInput" accept=".wav" hidden />
       <p class="upload-title">DRAG_AND_DROP_WAV_FILE</p>
@@ -41,23 +40,19 @@
       <p class="upload-hint">// FILE_SUPPORT: .WAV_ONLY.</p>
     </div>
 
-    <!-- Loading -->
     <div class="loading" id="loading" style="display:none;">
       <div class="loading-bar"></div>
       <p class="loading-text">// PROCESSING_AUDIO_SIGNAL...</p>
     </div>
 
-    <!-- Results -->
     <div class="results" id="results" style="display:none;">
 
-      <!-- Result Card -->
       <div class="result-card" id="resultCard">
         <div class="result-icons" id="resultIcons"></div>
         <div class="result-label" id="resultLabel">—</div>
         <div class="result-certainty" id="resultCertainty">—</div>
       </div>
 
-      <!-- Feature Cards -->
       <div class="features-grid">
         <div class="feat-card">
           <div class="feat-num">01</div>
@@ -85,7 +80,6 @@
         </div>
       </div>
 
-      <!-- Graphs -->
       <div class="graphs-grid">
         <div class="graph-box">
           <p class="graph-label">TIME_DOMAIN (Waveform)</p>
@@ -97,8 +91,11 @@
         </div>
       </div>
 
-      <!-- Reset -->
-      <button class="reset-btn" onclick="resetUI()">[ ANALYZE_NEW_FILE ]</button>
+      <!-- Action buttons -->
+      <div class="action-btns">
+        <button class="reset-btn" onclick="resetUI()">[ ANALYZE_NEW_FILE ]</button>
+        <button class="download-btn" onclick="downloadReport()">[ DOWNLOAD_REPORT ]</button>
+      </div>
 
     </div>
   </section>
@@ -141,6 +138,168 @@
       <div class="wf-step">[VEHICLE_CLASS_PREDICTION]</div>
     </div>
   </section>
+
+  <!-- PRINT REPORT (hidden, only used for download) -->
+  <div id="printReport" style="display:none;">
+    <style>
+      #printReport {
+        font-family: 'Share Tech Mono', monospace;
+        background: #000;
+        color: #fff;
+        padding: 40px;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      #printReport .r-header {
+        border-bottom: 2px solid var(--rcolor, #00fff7);
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+      }
+      #printReport .r-title {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 14px;
+        letter-spacing: 3px;
+        color: #888;
+        margin-bottom: 6px;
+      }
+      #printReport .r-project {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 32px;
+        letter-spacing: 4px;
+        color: #fff;
+      }
+      #printReport .r-result-box {
+        border: 2px solid var(--rcolor, #00fff7);
+        border-radius: 6px;
+        padding: 24px;
+        text-align: center;
+        margin-bottom: 30px;
+        background: rgba(0,255,247,0.03);
+      }
+      #printReport .r-vehicle {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 52px;
+        letter-spacing: 6px;
+        color: var(--rcolor, #00fff7);
+        margin: 10px 0 6px;
+      }
+      #printReport .r-certainty {
+        font-size: 16px;
+        color: #a855f7;
+        letter-spacing: 2px;
+      }
+      #printReport .r-section-label {
+        font-size: 11px;
+        color: var(--rcolor, #00fff7);
+        letter-spacing: 3px;
+        margin-bottom: 14px;
+        border-left: 3px solid var(--rcolor, #00fff7);
+        padding-left: 10px;
+      }
+      #printReport .r-feats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-bottom: 30px;
+      }
+      #printReport .r-feat {
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 4px;
+        padding: 14px 10px;
+        text-align: center;
+        background: #111;
+      }
+      #printReport .r-feat-name {
+        font-size: 9px;
+        color: #666;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+      }
+      #printReport .r-feat-val {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 20px;
+        color: #fff;
+      }
+      #printReport .r-graphs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 30px;
+      }
+      #printReport .r-graph {
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 4px;
+        padding: 12px;
+        background: #0a0a0a;
+      }
+      #printReport .r-graph-label {
+        font-size: 10px;
+        color: var(--rcolor, #00fff7);
+        letter-spacing: 2px;
+        margin-bottom: 8px;
+      }
+      #printReport .r-graph img {
+        width: 100%;
+      }
+      #printReport .r-footer {
+        border-top: 1px solid #222;
+        padding-top: 16px;
+        font-size: 10px;
+        color: #444;
+        display: flex;
+        justify-content: space-between;
+        letter-spacing: 1px;
+      }
+    </style>
+
+    <div class="r-header">
+      <div class="r-title">[ VEHISOUND_ANALYZER ] — ANALYSIS REPORT</div>
+      <div class="r-project">ACOUSTIC VEHICLE CLASSIFICATION</div>
+    </div>
+
+    <div class="r-result-box" id="rResultBox">
+      <div style="font-size:13px;color:#666;letter-spacing:2px;margin-bottom:4px;">DETECTED VEHICLE CLASS</div>
+      <div class="r-vehicle" id="rVehicle">—</div>
+      <div class="r-certainty" id="rCertainty">—</div>
+    </div>
+
+    <div class="r-section-label">SPECTRAL FEATURES</div>
+    <div class="r-feats">
+      <div class="r-feat">
+        <div class="r-feat-name">SPECTRAL_CENTROID</div>
+        <div class="r-feat-val" id="rf1">—</div>
+      </div>
+      <div class="r-feat">
+        <div class="r-feat-name">TOTAL_ENERGY</div>
+        <div class="r-feat-val" id="rf2">—</div>
+      </div>
+      <div class="r-feat">
+        <div class="r-feat-name">DOMINANT_FREQ</div>
+        <div class="r-feat-val" id="rf3">—</div>
+      </div>
+      <div class="r-feat">
+        <div class="r-feat-name">BAND_ENERGY_RATIO</div>
+        <div class="r-feat-val" id="rf4">—</div>
+      </div>
+    </div>
+
+    <div class="r-section-label">SIGNAL VISUALIZATIONS</div>
+    <div class="r-graphs">
+      <div class="r-graph">
+        <div class="r-graph-label">TIME_DOMAIN (Waveform)</div>
+        <img id="rWaveform" src="" alt="waveform"/>
+      </div>
+      <div class="r-graph">
+        <div class="r-graph-label">FREQUENCY_DOMAIN (FFT)</div>
+        <img id="rFft" src="" alt="fft"/>
+      </div>
+    </div>
+
+    <div class="r-footer">
+      <span>VEHISOUND_ANALYZER — SVM + FFT CLASSIFIER</span>
+      <span id="rTimestamp">—</span>
+    </div>
+  </div>
 
   <script src="/static/main.js"></script>
 </body>
