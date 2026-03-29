@@ -28,6 +28,9 @@ fileInput.addEventListener('change', () => {
   if (fileInput.files[0]) processFile(fileInput.files[0]);
 });
 
+// Store last result for report
+let lastResult = null;
+
 function processFile(file) {
   uploadZone.style.display = 'none';
   loading.style.display    = 'block';
@@ -47,7 +50,10 @@ function processFile(file) {
         return;
       }
 
-      // Icon map — all 9 dataset classes
+      // Store result for report download
+      lastResult = data;
+
+      // Icon map — all 8 dataset classes
       const iconMap = {
         'BIKE':       '<i class="fas fa-motorcycle"></i>',
         'BUS':        '<i class="fas fa-bus"></i>',
@@ -127,4 +133,72 @@ function resetUI() {
   loading.style.display    = 'none';
   uploadZone.style.display = 'block';
   fileInput.value = '';
+  lastResult = null;
+}
+
+function downloadReport() {
+  if (!lastResult) return;
+
+  const colorMap = {
+    'BIKE':       '#a855f7',
+    'BUS':        '#f97316',
+    'CAR':        '#00fff7',
+    'CROSSOVER':  '#22c55e',
+    'JEEP':       '#84cc16',
+    'MINIBUS':    '#fb923c',
+    'PICKUP':     '#eab308',
+    'SPORTS_CAR': '#ef4444',
+    'TRUCK':      '#3b82f6',
+  };
+
+  const color     = colorMap[lastResult.prediction] || '#00fff7';
+  const timestamp = new Date().toLocaleString();
+  const label     = lastResult.prediction.replace('_', ' ');
+
+  // Populate the hidden report div
+  document.getElementById('rResultBox').style.setProperty('--rcolor', color);
+  document.getElementById('rVehicle').textContent   = label;
+  document.getElementById('rVehicle').style.color   = color;
+  document.getElementById('rCertainty').textContent = lastResult.certainty + '% SIGNAL_MATCH';
+  document.getElementById('rf1').textContent = lastResult.features.spectral_centroid + ' Hz';
+  document.getElementById('rf2').textContent = lastResult.features.total_energy.toExponential(2) + ' J';
+  document.getElementById('rf3').textContent = (lastResult.features.dominant_freq / 1000).toFixed(2) + ' kHz';
+  document.getElementById('rf4').textContent = lastResult.features.band_ratio.toFixed(3);
+  document.getElementById('rWaveform').src   = 'data:image/png;base64,' + lastResult.waveform;
+  document.getElementById('rFft').src        = 'data:image/png;base64,' + lastResult.fft;
+  document.getElementById('rTimestamp').textContent = timestamp;
+
+  // Grab printReport HTML
+  const reportEl  = document.getElementById('printReport');
+  const reportHTML = reportEl.innerHTML;
+
+  // Build a full standalone HTML page
+  const fullHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>VehiSound Report — ${label}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: 'Share Tech Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+  ${reportHTML}
+</body>
+</html>`;
+
+  // Download as .html file
+  const blob = new Blob([fullHTML], { type: 'text/html' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `vehisound_report_${lastResult.prediction}_${Date.now()}.html`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
