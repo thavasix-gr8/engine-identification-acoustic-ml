@@ -102,7 +102,7 @@ TRUCK           1.00      1.00      1.00
 | Phase | What Changed |
 |---|---|
 | Phase 1 | Started with synthetic generated audio — 2 classes (Car vs Bike) — 4 features — ~70% accuracy |
-| Phase 2 | Switched to real VISC8 dataset — expanded to 9 vehicle classes — 4 features |
+| Phase 2 | Switched to real VISC8 dataset — expanded to 9 vehicle classes — 4 features - ~81% accuracy |
 | Phase 3 | Upgraded to 21 features including MFCCs — accuracy jumped to **98.4%** |
 
 ---
